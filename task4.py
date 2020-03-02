@@ -5,10 +5,10 @@ list1 = []
 
 for i in range(9, 1, -1):
     if key < 10 and key == i:
-        i = i+1
+        i = i + 1
     else:
         while inpt % i == 0:
-            inpt = inpt/i
+            inpt = inpt / i
             list1.append(str(i))
 
 if len(list1) <= 1:

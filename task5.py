@@ -10,6 +10,6 @@ for line in range(key):
 
 for i in range(len(list1)):
     sum1 = sum1 + int(list1[i][i])
-    sum2 = sum2 + int(list1[i][-1*(i+1)])
+    sum2 = sum2 + int(list1[i][-1 * (i + 1)])
 
-print(abs(sum1-sum2))
+print(abs(sum1 - sum2))
