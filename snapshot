@@ -1,0 +1,109 @@
+#!/usr/bin/env python
+
+import psutil
+import json
+import time
+import argparse
+from datetime import datetime
+
+parser = argparse.ArgumentParser(description='Host monitoring script')
+parser.add_argument(
+    'data_type',
+    type=str,
+    nargs='?',
+    const=1,
+    default='txt',
+    help='Output file format: txt or json'
+    )
+parser.add_argument(
+    'interval',
+    type=int,
+    nargs='?',
+    const=1,
+    default=300,
+    help='Time interval in which you will collect data'
+    )
+args = parser.parse_args()
+
+
+class pc_info:
+    ''' computer info '''
+    def __init__(self):
+        self.cpu = self.get_cpu()
+        self.mem = self.get_mem()
+        self.vmem = self.get_vmem()
+        self.io = self.get_io()
+        self.net = self.get_net()
+
+    def get_cpu(self):
+        return psutil.cpu_percent()
+
+    def get_mem(self):
+        return psutil.disk_usage('/').percent
+
+    def get_vmem(self):
+        return psutil.virtual_memory().percent
+
+    def get_io(self):
+        a = int(psutil.disk_io_counters().read_count)
+        b = int(psutil.disk_io_counters().write_count)
+        return round(a/b, 3)
+
+    def get_net(self):
+        a = round(psutil.net_io_counters().bytes_sent / (1024 ** 3), 3)
+        b = round(int(psutil.net_io_counters().bytes_recv) / (1024 ** 3), 3)
+        return a, b
+
+
+def ctime():
+    return str(datetime.now())
+
+
+def output_json(n):
+    to_json = {
+        'SNAPSHOT': str(n),
+        'Time stamp': ctime(),
+        'CPU': pc_info().cpu,
+        'MEM': pc_info().mem,
+        'Virtual Memory': pc_info().vmem,
+        'I/O': pc_info().io,
+        'NET': pc_info().net
+        }
+    with open("info.json", "a") as f:
+        json.dump(to_json, f, indent=3)
+    f = open('info.json', 'a+')
+    f.write('\n')
+    f.close()
+    return print('Json created')
+
+
+def output_txt(n):
+    st = 'SNAPSHOT {num}: TIME STAMP: {time} \
+    CPU: {cpu} % MEMORY: {mem} % VIRTUAL_MEMORY: {vmem} % \
+    I/O(r/w): {i} NET_stat(out/in): {net} GB \
+    '.format(
+        num=n,
+        time=ctime(),
+        cpu=pc_info().cpu,
+        mem=pc_info().mem,
+        vmem=pc_info().vmem,
+        i=pc_info().io,
+        net=pc_info().net
+        )
+    f = open('info.txt', 'a+')
+    f.write(st+'\n')
+    return print('txt created')
+
+
+n = 0
+
+if args.data_type == 'txt':
+    while True:
+        n += 1
+        output_txt(n)
+        time.sleep(args.interval)
+elif args.data_type == 'json':
+    while True:
+        n += 1
+        output_json(n)
+        time.sleep(args.interval)
