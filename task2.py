@@ -8,8 +8,8 @@ for i in range(delim):
     if my_string[i] == my_string[-(i + 1)]:
         count += 1
     else:
-        print('No')
+        print('no')
         break
 
 if count == delim:
-    print('Yes')
+    print('yes')
