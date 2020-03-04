@@ -1,0 +1,93 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+import getpass
+import requests
+import argparse
+from github import Github
+
+parser = argparse.ArgumentParser(description='Script for working with GitHub')
+parser.add_argument('-v', '--version', action='version', version='v0.1_beta')
+parser.add_argument('-o', '--owner', nargs='?',
+                    default='default', action="store",
+                    dest='owner', help='set username')
+
+parser.add_argument(
+                    '-r', '--repo', action="store",
+                    dest='repo', help='set repository name')
+
+parser.add_argument('--info', action="store_true", dest='info',
+                    help='information about user/repo')
+
+parser.add_argument('--date', action="store_true", dest='date',
+                    help='date of user/repo activity')
+
+parser.add_argument('--link', action="store_true", dest='link',
+                    help='show links for clone repo')
+parser.add_argument('--all', '-a', action="store_true", dest='all',
+                    help='show all info')
+args = parser.parse_args()
+
+count = 0
+
+print('Please input GitHub credentials')
+
+uname = input('Username: ')
+
+if args.owner == 'default':
+    args.owner = uname
+
+if args.all:
+    args.info = True
+    args.date = True
+    if args.repo is not None:
+        args.link = True
+
+
+while count <= 2:
+    try:
+        upass = getpass.getpass()
+        g = Github(uname, upass)
+        user = g.get_user()
+        check = user.login
+    except Exception:
+        print('Bad credentials')
+        count += 1
+    else:
+        break
+else:
+    quit()
+
+
+if args.repo is not None:
+    st = 'https://api.github.com/repos/{user}/{repo}'.format(
+        user=args.owner, repo=args.repo)
+else:
+    st = 'https://api.github.com/users/{user}'.format(user=args.owner)
+
+r = requests.get(st, auth=(uname, upass))
+data = r.json()
+
+try:
+    if args.link:
+        print('SSH: ', data["ssh_url"])
+        print('GIT: ', data["git_url"])
+        print('HTTPS: ', data["clone_url"])
+
+    if args.info:
+        if args.repo is not None:
+            print('Full name: ', data["full_name"])
+            print('Last push: ', data["pushed_at"])
+            print('Basic language: ', data["language"])
+            print('Default branch: ', data["default_branch"])
+            print('Forks: ', data["forks"])
+        else:
+            print('Name: ', data["name"])
+            print('EMAIL: ', data["email"])
+            print('Work for: ', data["company"])
+            print('Public repos: ', data["public_repos"])
+    if args.date:
+        print('Registered: ', data["created_at"])
+        print('Last actions: ', data["updated_at"])
+except Exception:
+    print('Something wrong...This parametr not for object')
