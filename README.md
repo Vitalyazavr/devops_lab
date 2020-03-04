@@ -15,7 +15,7 @@ Clone the repo and navigate to this folder.
 ```bash
 # to install
  pip install .
- snapshot
+ pr-stats
 ```
 
 **_How it works:_** <br>
