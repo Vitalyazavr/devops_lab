@@ -72,7 +72,8 @@ def output_json(n):
     with open("info.json", "a") as f:
         json.dump(to_json, f, indent=3)
         f.write('\n')
-    return print('Json created')
+        print('Json created')
+    return None
 
 
 def output_txt(n):
@@ -90,18 +91,18 @@ def output_txt(n):
         )
     with open("info.txt", "a+") as f:
         f.write(st+'\n')
-    return print('txt created')
+        print('txt created')
+    return None
 
 
 n = 0
 
-if args.data_type == 'txt':
-    while True:
+while True:
+    if args.data_type == 'txt':
         n += 1
         output_txt(n)
         time.sleep(args.interval)
-elif args.data_type == 'json':
-    while True:
+    elif args.data_type == 'json':
         n += 1
         output_json(n)
         time.sleep(args.interval)
