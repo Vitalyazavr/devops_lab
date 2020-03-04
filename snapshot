@@ -71,9 +71,7 @@ def output_json(n):
         }
     with open("info.json", "a") as f:
         json.dump(to_json, f, indent=3)
-    f = open('info.json', 'a+')
-    f.write('\n')
-    f.close()
+        f.write('\n')
     return print('Json created')
 
 
@@ -90,8 +88,8 @@ def output_txt(n):
         i=pc_info().io,
         net=pc_info().net
         )
-    f = open('info.txt', 'a+')
-    f.write(st+'\n')
+    with open("info.txt", "a+") as f:
+        f.write(st+'\n')
     return print('txt created')
 
 
