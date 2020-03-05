@@ -98,11 +98,10 @@ def output_txt(n):
 n = 0
 
 while True:
+    n += 1
     if args.data_type == 'txt':
-        n += 1
         output_txt(n)
         time.sleep(args.interval)
     elif args.data_type == 'json':
-        n += 1
         output_json(n)
         time.sleep(args.interval)
