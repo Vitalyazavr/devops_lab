@@ -73,7 +73,6 @@ def output_json(n):
         json.dump(to_json, f, indent=3)
         f.write('\n')
     print('Json created')
-    return None
 
 
 def output_txt(n):
@@ -92,7 +91,6 @@ def output_txt(n):
     with open("info.txt", "a+") as f:
         f.write(st+'\n')
     print('txt created')
-    return None
 
 
 n = 0
