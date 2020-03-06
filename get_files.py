@@ -27,10 +27,7 @@ def out_par_files(path):
     files = []
     for file in os.listdir(path):
         if os.path.isfile(path + file):
-            mlist = []
-            mlist.append(file)
-            mlist.append(os.path.getctime(path + file))
-            files.append(mlist)
+          files.append([file, os.path.getctime(path + file)])
     return files
 
 
@@ -39,10 +36,7 @@ def list_files_recursively(path):
     for dirname, dirnames, filenames in os.walk(path):
         for filename in filenames:
             fullpath = os.path.join(dirname, filename)
-            mlist = []
-            mlist.append(fullpath[len(path):])
-            mlist.append(os.path.getctime(fullpath))
-        files.append(mlist)
+        files.append([fullpath[len(path):], os.path.getctime(fullpath)])
     return files
 
 
