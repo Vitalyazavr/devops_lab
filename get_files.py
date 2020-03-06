@@ -27,7 +27,7 @@ def out_par_files(path):
     files = []
     for file in os.listdir(path):
         if os.path.isfile(path + file):
-          files.append([file, os.path.getctime(path + file)])
+            files.append([file, os.path.getctime(path + file)])
     return files
 
 
