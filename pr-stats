@@ -4,7 +4,6 @@
 import getpass
 import requests
 import argparse
-from github import Github
 
 parser = argparse.ArgumentParser(description='Script for working with GitHub')
 parser.add_argument('-v', '--version', action='version', version='v0.1_beta')
@@ -33,6 +32,7 @@ count = 0
 print('Please input GitHub credentials')
 
 uname = input('Username: ')
+upass = getpass.getpass()
 
 if args.owner == 'default':
     args.owner = uname
@@ -42,21 +42,6 @@ if args.all:
     args.date = True
     if args.repo is not None:
         args.link = True
-
-
-while count <= 2:
-    try:
-        upass = getpass.getpass()
-        g = Github(uname, upass)
-        user = g.get_user()
-        check = user.login
-    except Exception:
-        print('Bad credentials')
-        count += 1
-    else:
-        break
-else:
-    quit()
 
 
 if args.repo is not None:
